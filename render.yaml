@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sistema-industrial-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__SqlServer
+        sync: false # Se setea manualmente en el dashboard de Render
+      - key: Jwt__Key
+        sync: false # Se setea manualmente en el dashboard de Render
+      - key: Cors__AllowedOrigins__0
+        sync: false # URL del frontend en Netlify, ej: https://tu-app.netlify.app
