@@ -1,175 +1,184 @@
+<div align="center">
+
 # Sistema Industrial
 
-Aplicación web para la gestión integral de producción semanal de una fábrica
-de productos de limpieza.
+**Gestión de producción semanal para fábrica de productos de limpieza**
 
-> Reemplaza planillas Excel manuales con un sistema centralizado que controla
-> stock, tirado y armado en tiempo real.
+[![Live Demo](https://img.shields.io/badge/_Live_Demo-sistema--industrial.vercel.app-blue?style=for-the-badge)](https://sistema-industrial-teal.vercel.app/semanas)
+[![Backend](https://img.shields.io/badge/API-Render-46E3B7?style=for-the-badge)](https://sistema-industrial-api.onrender.com/scalar/v1)
+[![Vue 3](https://img.shields.io/badge/Vue_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org)
+[![.NET 9](https://img.shields.io/badge/.NET_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com)
+[![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
+
+**Reemplaza 5 años de planillas Excel manuales con un sistema web en tiempo real.**
+
+[ Ver Demo en Vivo](https://sistema-industrial-teal.vercel.app/semanas) ·
+[ API Docs (Scalar)](https://sistema-industrial-api.onrender.com/scalar/v1) ·
+[ Reportar Bug](https://github.com/Isaacjesusacevedo/SistemaIndustrial/issues)
+
+</div>
 
 ---
 
-## Impacto real
+## Probar la demo (sin registro)
 
-Este sistema está **en producción desde 2023** y reemplazó un proceso que
-durante 5 años se hizo primero a mano y luego en Excel.
+La demo está abierta — no requiere login.
 
-| Métrica | Resultado | Cómo se midió |
+### [**Abrir la demo**](https://sistema-industrial-teal.vercel.app/semanas)
+
+> **Nota sobre la demo**: el login está deshabilitado a propósito para
+> facilitar la navegación. En producción real usa JWT + guard de rutas.
+
+### Tour sugerido (3 minutos)
+
+| # | Paso | Qué mirar |
 |---|---|---|
-| **Productividad** de sectores afectados | **+40%** | Unidades producidas / hora antes vs. después |
-| **Reducción de errores** técnicos | **60%** | Reclamos por errores de cálculo en 6 meses |
-| **Automatización** del control de stock | **80%** | % de tareas que ya no requieren carga manual |
-| **Tiempo del control de stock semanal** | de **3 horas a 1 hora** | Cronometrado durante 4 semanas |
-| **Errores de cálculo** en tirado | **eliminados** | Sin reclamos por fórmulas desde el cambio |
+| 1 | **[Dashboard](https://sistema-industrial-teal.vercel.app/dashboard)** | KPIs + progreso general + checklist de módulos |
+| 2 | **[Semanas](https://sistema-industrial-teal.vercel.app/semanas)** | Historial de 20 semanas · badge "ACTIVA" · estado por color |
+| 3 | **[Detalle de semana](https://sistema-industrial-teal.vercel.app/semanas/1)** | Tabs por módulo · progreso de cobertura · KPIs |
+| 4 | **[Sector Tirado](https://sistema-industrial-teal.vercel.app/semanas/1/tirado)** | Tabla con input inline para cargar tachos · filtros Faltantes/Sobrantes |
+| 5 | **[Tachos de la semana](https://sistema-industrial-teal.vercel.app/semanas/1/tirado/tachos)** | Resumen por día · tabla de tiradas individuales |
+| 6 | **[Catálogo de Productos](https://sistema-industrial-teal.vercel.app/productos)** | Productos reutilizables entre semanas |
+| 7 | **[Sector Armado](https://sistema-industrial-teal.vercel.app/semanas/1/armado)** | Vista consolidada del sector · ajuste de stock |
 
-### Antes vs. después
+---
 
-| Tarea | Antes (Excel) | Ahora (Sistema) |
-|---|---|---|
-| Control de stock semanal | 3 horas manuales | **1 hora automatizada** |
-| Cálculo de tirado por producto | Fórmulas que se rompían | Cálculo automático |
-| Sincronización entre sectores | Copiar/pegar entre planillas | Tiempo real |
-| Historial por semana | 1 archivo Excel por semana | Base de datos centralizada |
-| Errores de tipeo | Frecuentes | Validación en formularios |
+## Impacto real (en producción desde 2023)
 
-### Contexto
+Este sistema **reemplazó un proceso que se hacía a mano (2018-2020) y luego
+en Excel (2020-2022)**.
 
-- **2018-2020**: Control de producción a mano en papel
-- **2020-2022**: Migré el proceso a Excel (fórmulas, tablas dinámicas)
-- **2023-hoy**: Desarrollo este sistema web que reemplazó el Excel
-- **Actualidad**: 20+ semanas registradas, uso diario en producción
+| Métrica | Antes | Ahora | Mejora |
+|---|---|---|---|
+| **Control de stock semanal** | 3 horas manuales | **1 hora automatizada** | **66% tiempo** |
+| **Productividad de sectores afectados** |  |  | **+40%** |
+| **Errores técnicos** | Frecuentes | Validación automática | **60%** |
+| **Automatización del control** | 20% | 80% | **80% automatizado** |
+| **Errores de cálculo** | Fórmulas rotas | Cero | **100%** |
+
+### Evolución
+
+- **2018-2020** · Proceso a mano en papel
+- **2020-2022** · Migré todo a Excel (fórmulas, tablas dinámicas)
+- **2023-hoy** · Desarrollo y mantengo este sistema web
+- **Actualidad** · 20+ semanas registradas, uso diario en planta
 
 ---
 
 ## Funcionalidades
 
 ### Gestión de producción
-- **Catálogo de productos** con pedidos semanales aproximados
-- **Semanas laborales** (lunes a sábado) con validación automática
-- **Carga inicial masiva** de productos por semana
-- **Sector Tirado** con registro diario de tachos
-- **Sector Armado** con vista consolidada
-- **Control de stock** con sincronización automática desde tirado
+- Catálogo de productos reutilizable entre semanas
+- Semanas laborales (lunes a sábado) con validación
+- Carga inicial masiva de productos desde el catálogo
+- Registro diario de tachos con input inline
+- Cálculos automáticos de stock, tachos y progreso
+- Vista consolidada para sector Armado
 
-### Cálculos automáticos
-- Stock total por producto: `StockInicial + Tirado − Pedido`
-- Tachos estimados según promedio por producto
-- Progreso semanal basado en cobertura real
-- Estados de semana (Planificada / EnProgreso / Completada / Cancelada)
-- Alertas de faltantes y sobrantes
+### Cálculos y automatizaciones
+- `StockTotal = StockInicial + Tirado − PedidoSemanal`
+- `TachosEstimados = StockTotal / PromedioPorTacho`
+- **Progreso semanal** basado en cobertura real (no en productos cargados)
+- **Estados automáticos** (Planificada → EnProgreso → Completada)
+- **Alertas** de faltantes y sobrantes
 
-### Visualización
-- **Dashboard** con progreso general y checklist
-- **Detalle semanal** con tabs por módulo
-- **Tachos diarios** con historial por producto
-- **Filtros** por estado (Faltantes / Sobrantes)
+### UX/Diseño
+- **Dark mode** por defecto (reduce fatiga visual en planta)
+- **Responsive** (mobile, tablet, desktop)
+- Componentes reutilizables (KpiCard, DataTable, FormField)
+- **Feedback inmediato** (toasts, validación en tiempo real)
 
 ---
 
-## Arquitectura
+## Stack técnico
+
+### Frontend
+| Tecnología | Uso |
+|---|---|
+| **Vue 3** (Composition API) | Framework principal |
+| **TypeScript** | Tipado estricto |
+| **Vite** | Build tool |
+| **Pinia** | State management |
+| **Element Plus** | Componentes UI |
+| **Vue Router** | Navegación |
+| **Vercel** | Hosting |
+
+### Backend
+| Tecnología | Uso |
+|---|---|
+| **.NET 9** | Runtime |
+| **ASP.NET Core** (Minimal APIs) | Web framework |
+| **Entity Framework Core** | ORM |
+| **SQL Server** | Base de datos |
+| **JWT** | Autenticación |
+| **Scalar** | Documentación de API |
+| **Render** | Hosting |
+
+### Arquitectura por capas
 
 ```text
 SistemaIndustrial/
-├── Frontend/                        # Vue 3 + TypeScript + Vite
-│   ├── src/
-│   │   ├── components/              # Componentes reutilizables
-│   │   ├── composables/             # Lógica compartida
-│   │   ├── stores/                  # Pinia stores
-│   │   ├── views/                   # Vistas por módulo
-│   │   ├── types/                   # Tipos TypeScript
-│   │   ├── services/api/            # Cliente HTTP
-│   │   └── assets/styles/           # CSS organizado por capas
-│   └── public/_redirects            # Configuración deploy (SPA)
-├── SistemaIndustrial.AD/            # Capa de Acceso a Datos
-│   ├── Models/                      # Entidades EF Core
-│   ├── Data/                        # AppDbContext
-│   ├── Interfaces/                  # Repositorios (contratos)
-│   └── Repositories/                # Repositorios (SpInvoker / EF)
-├── SistemaIndustrial.BR/            # Capa de Reglas de Negocio
-│   ├── DTOs/                        # Data Transfer Objects
-│   ├── Services/                    # Lógica de negocio
-│   ├── Validators/                  # Validaciones
-│   └── Interfaces/                  # Contratos
-├── SistemaIndustrial.API/           # Capa de Presentación
-│   ├── Endpoints/                   # Minimal APIs
-│   └── Program.cs
-└── Docs/
-    └── sql/                         # Stored Procedures
-        ├── 14_create_tirado_productos.sql
-        ├── 15_create_all_stored_procedures.sql
-        ├── 16_create_productos_catalogo.sql
-        └── 18_drop_registro_tacho.sql
+├── Frontend/                    # Vue 3 + Vite
+├── SistemaIndustrial.AD/        # Acceso a Datos (repositorios + EF)
+├── SistemaIndustrial.BR/        # Reglas de Negocio (servicios + validadores)
+├── SistemaIndustrial.API/       # Endpoints (minimal APIs)
+└── Docs/sql/                    # Stored Procedures
 ```
 
-### Stack técnico
-
-**Frontend**
-- Vue 3 (Composition API + `<script setup>`)
-- TypeScript
-- Pinia (state management)
-- Element Plus (UI)
-- Vue Router
-- Vite (build tool)
-
-**Backend**
-- .NET 9 (ASP.NET Core Minimal APIs)
-- Entity Framework Core
-- SQL Server
-- JWT (autenticación)
-- Scalar (documentación de API)
-- Stored Procedures para operaciones críticas
-
-**Infraestructura**
-- Netlify (frontend hosting)
-- SQL Server (base de datos)
+- **AD** · Entidades EF Core + Repositorios (SpInvoker + LINQ)
+- **BR** · DTOs + Servicios + Validadores
+- **API** · Minimal APIs + JWT + Middleware de errores
 
 ---
 
-## Instalación local
+## Capturas
+
+> TODO: subir las capturas a `Docs/screenshots/`.
+
+### Dashboard
+![Dashboard](./Docs/screenshots/dashboard.png)
+
+### Detalle de semana con progreso
+![Detalle](./Docs/screenshots/detalle-semana.png)
+
+### Sector Tirado con carga inline
+![Tirado](./Docs/screenshots/tirado.png)
+
+### Catálogo de productos
+![Productos](./Docs/screenshots/productos.png)
+
+---
+
+## Ejecutar localmente
 
 ### Requisitos
 
-- Node.js 20+
-- .NET 9 SDK
-- SQL Server (local o remoto)
+- **Node.js 20+**
+- **.NET 9 SDK**
+- **SQL Server** (Express, LocalDB o Docker)
+- **Git**
 
-### 1. Clonar el repositorio
+### 1. Clonar el repo
 
 ```bash
 git clone https://github.com/Isaacjesusacevedo/SistemaIndustrial.git
 cd SistemaIndustrial
 ```
 
-### 2. Configurar la base de datos
-
-Ejecutá en SSMS (como admin):
+### 2. Levantar la base de datos
 
 ```sql
--- 1. Crear la base de datos
 CREATE DATABASE SistemaIndustrialDB;
 GO
 
--- 2. Crear el usuario (opcional)
 CREATE LOGIN industrial_user WITH PASSWORD = 'Industrial2026';
 ALTER SERVER ROLE dbcreator ADD MEMBER industrial_user;
 GO
 ```
 
-Después corré las migraciones de EF Core:
-
-```bash
-dotnet ef database update --project SistemaIndustrial.AD --startup-project SistemaIndustrial.API
-```
-
-Y ejecutá los scripts de SPs (en orden):
-
-```text
-Docs/sql/15_create_all_stored_procedures.sql
-Docs/sql/16_create_productos_catalogo.sql
-```
-
 ### 3. Configurar el backend
 
-Editá `SistemaIndustrial.API/appsettings.Development.json`:
+Editar `SistemaIndustrial.API/appsettings.Development.json`:
 
 ```json
 {
@@ -177,29 +186,35 @@ Editá `SistemaIndustrial.API/appsettings.Development.json`:
     "SqlServer": "Server=localhost;Database=SistemaIndustrialDB;User Id=industrial_user;Password=Industrial2026;TrustServerCertificate=True;"
   },
   "Jwt": {
-    "Key": "tu-clave-secreta-de-al-menos-32-caracteres",
+    "Key": "TuClaveSecretaDeAlMenos32Caracteres",
     "Issuer": "SistemaIndustrial",
     "Audience": "SistemaIndustrialClient"
-  },
-  "Cors": {
-    "AllowedOrigins": [
-      "http://localhost:5173",
-      "http://localhost:5174"
-    ]
   }
 }
 ```
 
-### 4. Correr el backend
+### 4. Aplicar migraciones
+
+```bash
+dotnet ef database update \
+  --project SistemaIndustrial.AD \
+  --startup-project SistemaIndustrial.API
+```
+
+### 5. Ejecutar SPs
+
+Abrir `Docs/sql/15_create_all_stored_procedures.sql` en SSMS y ejecutar.
+
+### 6. Levantar el backend
 
 ```bash
 dotnet run --project SistemaIndustrial.API
 ```
 
-Escucha en `http://localhost:5127`. Documentación disponible en
-`http://localhost:5127/scalar/v1`.
+Backend en `http://localhost:5127`
+Docs en `http://localhost:5127/scalar/v1`
 
-### 5. Correr el frontend
+### 7. Levantar el frontend
 
 ```bash
 cd Frontend
@@ -207,146 +222,112 @@ npm install
 npm run dev
 ```
 
-Disponible en `http://localhost:5173`.
+Frontend en `http://localhost:5173`
 
-## Capturas
-
-> TODO: subir capturas a `Docs/screenshots/` con estos nombres.
-
-- Dashboard de producción — `Docs/screenshots/dashboard.png`
-- Detalle de semana — `Docs/screenshots/detalle-semana.png`
-- Sector tirado — `Docs/screenshots/tirado.png`
-- Catálogo de productos — `Docs/screenshots/productos.png`
-
-## Scripts útiles
-
-### Backend
-
-```bash
-# Compilar
-dotnet build
-
-# Correr en modo desarrollo
-dotnet run --project SistemaIndustrial.API
-
-# Tests unitarios
-dotnet test
-
-# Crear migración EF Core
-dotnet ef migrations add NombreMigracion \
-  --project SistemaIndustrial.AD \
-  --startup-project SistemaIndustrial.API
-
-# Aplicar migraciones
-dotnet ef database update \
-  --project SistemaIndustrial.AD \
-  --startup-project SistemaIndustrial.API
-```
-
-### Frontend
-
-```bash
-# Instalar dependencias
-npm install
-
-# Correr en desarrollo
-npm run dev
-
-# Build de producción
-npm run build
-
-# Preview del build
-npm run preview
-
-# Type checking
-npm run typecheck
-```
+---
 
 ## Modelo de datos
+
+```text
+Semana (1) <── (N) TiradoProducto (1) <── (N) Tirada
+Semana (1) <── (N) StockSemana
+Semana (1) <── (N) InsumoSemana
+TiradoProducto (N) ── (1) Categoria
+ProductoCatalogo ── (plantilla para) TiradoProducto
+Usuario (auth)
+```
 
 ### Entidades principales
 
 | Entidad | Descripción |
 |---|---|
-| Semana | Período laboral (lunes a sábado) |
-| ProductoCatalogo | Catálogo general de productos |
-| TiradoProducto | Productos cargados por semana |
-| Tirada | Cada tacho individual tirado |
-| StockSemana | Control de stock semanal |
-| InsumoSemana | Insumos consumidos por semana |
-| Usuario | Usuarios del sistema |
+| `Semana` | Período laboral (lunes a sábado) |
+| `ProductoCatalogo` | Catálogo general reutilizable |
+| `TiradoProducto` | Productos cargados en una semana específica |
+| `Tirada` | Cada tacho individual que se tira |
+| `StockSemana` | Control de stock semanal |
+| `Usuario` | Autenticación y roles |
 
-### Relaciones
+---
 
-```text
-Semana (1) <── (N) TiradoProducto
-TiradoProducto (1) <── (N) Tirada
-Semana (1) <── (N) StockSemana
-Semana (1) <── (N) InsumoSemana
-ProductoCatalogo ── (plantilla para) TiradoProducto
-```
+## Decisiones de diseño
 
-## Diseño y UX
+### ¿Por qué Vue 3 + Composition API?
+Mejor tipado con TypeScript, lógica reutilizable vía composables, y mejor
+performance que Options API en apps medianas.
 
-Principios:
+### ¿Por qué Minimal APIs en lugar de Controllers?
+Menos boilerplate, más simple de mantener, endpoints agrupados por módulo.
 
-- Dark mode por defecto (menor fatiga visual en planta)
-- Tipografía monoespaciada para números (mejor lectura)
-- Validación en tiempo real de formularios
-- Feedback visual inmediato (toasts, colores)
-- Navegación por semana activa persistida
-- Responsive (mobile / tablet / desktop)
+### ¿Por qué SPs + LINQ mixto?
+- **SPs** para queries críticas (semana + joins con conteos)
+- **LINQ** para CRUDs simples (tirado, categorías)
+- **Decisión pragmática**: migrar 100% a LINQ sería ideal pero el costo/beneficio
+  no lo justificaba.
 
-Sistema de diseño:
+### ¿Por qué dark mode por defecto?
+La app se usa en planta con poca luz. El dark mode reduce fatiga visual y
+mejora la legibilidad en pantallas grandes.
 
-- Paleta oscura con acentos azules
-- Variables CSS para consistencia
-- Componentes reutilizables (KpiCard, DataTable, FormField)
-- CSS organizado por capas (base/, layouts/, components/, views/)
+### ¿Por qué el progreso se basa en "cobertura"?
+Inicialmente medía `tirado / pedido`. El problema: si había stock inicial,
+el progreso mostraba valores bajos aunque el pedido ya estuviera cubierto.
+Cambiamos a `(stockInicial + tirado) / pedido` que refleja la realidad.
+
+---
 
 ## Testing
 
 ```bash
-# Backend (34 unitarios: validators + services + API models)
+# Backend (34 unitarios en verde: validators + services + API models)
 dotnet test
 ```
+
+- [x] Tests unitarios backend (MSTest + Moq + EF InMemory)
+- [ ] Tests de componentes (Vitest)
+- [ ] Tests E2E (Playwright)
+
+---
 
 ## Roadmap
 
 - [x] Módulo de semanas laborales
 - [x] Catálogo de productos
 - [x] Sector tirado con registro de tachos
-- [x] Sector armado
+- [x] Sector armado con vista consolidada
 - [x] Control de stock
 - [x] Dashboard con progreso
 - [x] Tests unitarios (backend)
+- [x] Deploy en Vercel + Render
 - [ ] Tests de componentes (frontend)
+- [ ] PWA (offline-first)
 - [ ] Reportes exportables a PDF
 - [ ] Gráficos en dashboard
-- [ ] Modo offline con sincronización
-- [ ] App móvil (PWA)
 - [ ] Integración con impresoras térmicas
 
-## Contribuir
+---
 
-Este es un proyecto personal en producción. Si encontrás un bug o tenés una
-sugerencia, abrí un issue.
+## Sobre mí
+
+**Isaac Jesús Acevedo**
+Desarrollador Full Stack
+
+- [GitHub](https://github.com/Isaacjesusacevedo)
+- [LinkedIn](https://linkedin.com/in/tu-perfil) <!-- TODO: perfil real -->
+- isaacacevedor1610@gmail.com
+
+---
 
 ## Licencia
 
 Uso privado. Todos los derechos reservados.
 
-## Autor
+---
 
-**Isaac Jesús Acevedo** — Desarrollador full-stack. Este sistema está en
-producción desde 2023 y es utilizado diariamente en producción industrial.
+<div align="center">
 
-- GitHub: [@Isaacjesusacevedo](https://github.com/Isaacjesusacevedo)
-- LinkedIn: <!-- TODO: agregar perfil -->
+**Si te sirvió, dejame una estrella en GitHub**
 
-## Agradecimientos
+Hecho con esfuerzo en Argentina
 
-A todo el equipo de producción que probó y validó cada funcionalidad durante
-los primeros meses de implementación.
-
-<div align="center"><sub>Hecho en Argentina</sub></div>
+</div>
