@@ -19,17 +19,25 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("VueCors", policy =>
     {
-        var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-            ?? new[]
-            {
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "http://localhost:4173"
-            };
-        policy.WithOrigins(origins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.SetIsOriginAllowed(origin =>
+        {
+            // Permitir localhost (dev)
+            if (origin.StartsWith("http://localhost:")) return true;
+            if (origin.StartsWith("https://localhost:")) return true;
+
+            // Permitir cualquier subdominio de vercel.app del proyecto
+            if (origin.EndsWith(".vercel.app") && origin.Contains("sistema-industrial"))
+                return true;
+
+            // Permitir orígenes configurados explícitamente
+            var configOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+            if (configOrigins != null && configOrigins.Contains(origin)) return true;
+
+            return false;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 

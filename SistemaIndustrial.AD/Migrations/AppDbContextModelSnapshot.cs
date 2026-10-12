@@ -97,7 +97,7 @@ namespace SistemaIndustrial.AD.Migrations
                     b.ToTable("InsumosSemana");
                 });
 
-            modelBuilder.Entity("SistemaIndustrial.AD.Models.ObjetivoSemana", b =>
+            modelBuilder.Entity("SistemaIndustrial.AD.Models.ProductoCatalogo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,84 +105,48 @@ namespace SistemaIndustrial.AD.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PedidoSemanalAproximado")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("PromedioPorTacho")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("UnidadMedida")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Logrado")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<decimal>("Meta")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Porcentaje")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<int>("SemanaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SemanaId");
+                    b.HasIndex("Nombre")
+                        .IsUnique();
 
-                    b.ToTable("ObjetivosSemana");
-                });
-
-            modelBuilder.Entity("SistemaIndustrial.AD.Models.RegistroTacho", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("CantidadProducida")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CantidadRechazada")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<string>("EstadoCalidad")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Aprobado");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Operador")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SemanaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Turno")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SemanaId");
-
-                    b.ToTable("RegistrosTacho");
+                    b.ToTable("ProductosCatalogo");
                 });
 
             modelBuilder.Entity("SistemaIndustrial.AD.Models.Semana", b =>
@@ -430,28 +394,6 @@ namespace SistemaIndustrial.AD.Migrations
                     b.Navigation("Semana");
                 });
 
-            modelBuilder.Entity("SistemaIndustrial.AD.Models.ObjetivoSemana", b =>
-                {
-                    b.HasOne("SistemaIndustrial.AD.Models.Semana", "Semana")
-                        .WithMany("Objetivos")
-                        .HasForeignKey("SemanaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Semana");
-                });
-
-            modelBuilder.Entity("SistemaIndustrial.AD.Models.RegistroTacho", b =>
-                {
-                    b.HasOne("SistemaIndustrial.AD.Models.Semana", "Semana")
-                        .WithMany("RegistrosTacho")
-                        .HasForeignKey("SemanaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Semana");
-                });
-
             modelBuilder.Entity("SistemaIndustrial.AD.Models.StockSemana", b =>
                 {
                     b.HasOne("SistemaIndustrial.AD.Models.Semana", "Semana")
@@ -500,10 +442,6 @@ namespace SistemaIndustrial.AD.Migrations
             modelBuilder.Entity("SistemaIndustrial.AD.Models.Semana", b =>
                 {
                     b.Navigation("Insumos");
-
-                    b.Navigation("Objetivos");
-
-                    b.Navigation("RegistrosTacho");
 
                     b.Navigation("Stocks");
 
