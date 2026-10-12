@@ -786,14 +786,22 @@ dotnet ef database update  # aplica 20261011162134_AddCategoriasYTiradas
 14_create_tirado_productos.sql       # histórico: tabla TiradoProductos + sp_TiradoProductos_* (desactualizado vs EF)
 15_create_all_stored_procedures.sql  # 30 SPs: sp_Semanas_*, sp_Insumos_*, sp_Stock_*, sp_Usuarios_*
 16_create_productos_catalogo.sql     # tabla ProductosCatalogo + 7 sp_ProductosCatalogo_*
+17_fix_sp_names_stock_insumos.sql    # crea sp_StockSemana_* y sp_InsumosSemana_* (nombres que espera el backend)
 18_drop_registro_tacho.sql           # PENDIENTE: elimina SPs RegistroTacho y tabla RegistrosTacho (no ejecutar aún)
+19_update_week_states.sql            # recalcula Estado de semanas (correr tras cambios de datos)
+20_update_unidades_600.sql           # migra unidades Galón (4 L) → 600 (600 ml)
 ```
+NOTA: no existe `18_create_sp_productos_catalogo.sql`; el `18_*` es el drop de
+RegistroTacho y las SPs del catálogo viven en el `16_*` (canónico).
 
 ### Scripts Disponibles en `Docs/sql/`
 - `14_create_tirado_productos.sql` — Tabla `TiradoProductos` + SPs `sp_TiradoProductos_*` (histórico/desactualizado; el modelo EF usa `TiradosProducto` con `PedidoSemanal`, `CategoriaId`, `StockInicial`, `PromedioPorTacho`)
-- `15_create_all_stored_procedures.sql` — 30 SPs reales (`sp_Semanas_*`, `sp_Insumos_*`, `sp_Stock_*`, `sp_Usuarios_*`); sin bulk ni sync
-- `16_create_productos_catalogo.sql` — Tabla `ProductosCatalogo` + 7 SPs `sp_ProductosCatalogo_*`
+- `15_create_all_stored_procedures.sql` — 30 SPs reales (`sp_Semanas_*`, `sp_Insumos_*`, `sp_Stock_*`, `sp_Usuarios_*`); sin bulk ni sync. OJO: `sp_Semanas_HasDependentData` referencia `TiradoProductos` pero la tabla EF se llama `TiradosProducto`
+- `16_create_productos_catalogo.sql` — Tabla `ProductosCatalogo` + 7 SPs `sp_ProductosCatalogo_*` (canónico; coincide con `ProductoCatalogoRepository`)
+- `17_fix_sp_names_stock_insumos.sql` — Crea `sp_StockSemana_*` y `sp_InsumosSemana_*` (los que buscan los repositories)
 - `18_drop_registro_tacho.sql` — DROP de SPs `sp_RegistroTacho_*`/`sp_RegistrosTacho_*` y tabla `RegistrosTacho` (pendiente)
+- `19_update_week_states.sql` — Recalcula `Estado` (Planificada/EnProgreso/Completada) según cobertura; incluye SELECT de verificación
+- `20_update_unidades_600.sql` — Migra `UnidadMedida` en `ProductosCatalogo` y `TiradosProducto` (snapshot histórico intencional)
 
 ---
 
