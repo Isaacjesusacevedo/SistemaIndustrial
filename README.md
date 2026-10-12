@@ -147,6 +147,11 @@ SistemaIndustrial/
 ### Catálogo de productos
 ![Productos](./Docs/screenshots/productos.png)
 
+## Sistema anterior (Excel)
+
+Este sistema web reemplaza un proceso que se hacía en Excel desde 2020.
+El archivo original y su análisis están en [`Docs/legacy/`](./Docs/legacy/).
+
 ---
 
 ## Ejecutar localmente
