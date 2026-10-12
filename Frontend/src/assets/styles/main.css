@@ -1,0 +1,20 @@
+/* src/assets/styles/main.css */
+@import './base/fonts.css';
+@import './base/variables.css';
+@import './base/reset.css';
+@import './base/typography.css';
+@import './base/utilities.css';
+@import './layouts/app-shell.css';
+@import './layouts/section.css';
+@import './components/buttons.css';
+@import './components/table.css';
+@import './components/cards.css';
+@import './components/forms.css';
+@import './components/modal.css';
+@import './components/spinner.css';
+@import './components/chart-container.css';
+@import './views/dashboard.css';
+@import './views/tirado.css';
+@import './views/tachos-semana.css';
+@import './views/armado.css';
+@import './element-plus-dark.css';

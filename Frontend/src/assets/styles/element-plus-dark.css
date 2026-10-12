@@ -1,0 +1,98 @@
+/* src/assets/styles/element-plus-dark.css */
+/* Override del tema oscuro para componentes de Element Plus */
+
+/* ── Dialog ── */
+.el-dialog {
+  background: var(--bg-2) !important;
+  color: var(--text-0) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+}
+
+.el-dialog__title {
+  color: var(--text-0) !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.el-dialog__body {
+  color: var(--text-0) !important;
+  padding: 20px;
+}
+
+.el-dialog__footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 20px;
+}
+
+.el-dialog__close {
+  color: var(--text-2) !important;
+}
+
+.el-dialog__close:hover {
+  color: var(--text-0) !important;
+}
+
+/* ── Form / Inputs en dialogs ── */
+.el-dialog .el-input__wrapper,
+.el-dialog .el-textarea__inner {
+  background: var(--bg-1) !important;
+  border-color: var(--border) !important;
+  color: var(--text-0) !important;
+}
+
+.el-dialog .el-input__inner,
+.el-dialog .el-textarea__inner {
+  color: var(--text-0) !important;
+}
+
+.el-dialog .el-input__inner::placeholder,
+.el-dialog .el-textarea__inner::placeholder {
+  color: var(--text-3) !important;
+}
+
+/* ── Select dropdown ── */
+.el-select-dropdown {
+  background: var(--bg-2) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.el-select-dropdown__item {
+  color: var(--text-1) !important;
+}
+
+.el-select-dropdown__item.is-hovering,
+.el-select-dropdown__item:hover {
+  background: var(--surface) !important;
+  color: var(--text-0) !important;
+}
+
+.el-select-dropdown__item.is-selected {
+  color: var(--accent-bright) !important;
+}
+
+/* ── Date picker ── */
+.el-picker-panel {
+  background: var(--bg-2) !important;
+  border-color: var(--border) !important;
+  color: var(--text-0) !important;
+}
+
+/* ── Message box (confirmaciones) ── */
+.el-message-box {
+  background: var(--bg-2) !important;
+  border-color: var(--border) !important;
+}
+
+.el-message-box__title {
+  color: var(--text-0) !important;
+}
+
+.el-message-box__content {
+  color: var(--text-1) !important;
+}

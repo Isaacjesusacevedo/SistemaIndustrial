@@ -1,0 +1,124 @@
+/* src/assets/styles/views/dashboard.css */
+.modulos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.modulo-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s;
+}
+
+.modulo-card--ok {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.05), transparent);
+}
+
+.modulo-card__icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-wrap--primary { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.icon-wrap--info { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+.icon-wrap--success { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.icon-wrap--warning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.icon-wrap--danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.modulo-card__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.modulo-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.modulo-card__label {
+  font-weight: 600;
+  color: var(--text-0);
+  font-size: 0.9375rem;
+  margin-bottom: 2px;
+}
+
+.modulo-card__status {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.modulo-card__btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-1);
+  background: var(--bg-3);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.modulo-card__btn--primary {
+  background: var(--accent);
+  color: white;
+}
+
+.modulo-card__btn:hover {
+  transform: translateX(2px);
+}
+
+
+.pendiente-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-0);
+  font-size: 0.875rem;
+  background: var(--bg-3);
+  transition: all 0.2s;
+}
+
+.pendiente-item:hover {
+  background: var(--surface);
+  transform: translateX(2px);
+}
+
+.pendiente-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pendiente--danger .pendiente-dot { background: var(--red); }
+.pendiente--warning .pendiente-dot { background: var(--amber); }
+.pendiente--info .pendiente-dot { background: var(--accent); }
+
+@media (max-width: 640px) {
+  .modulos-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  .modulo-card__btn {
+    white-space: nowrap;
+  }
+}

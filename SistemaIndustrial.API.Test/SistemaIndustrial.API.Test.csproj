@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaIndustrial.API\SistemaIndustrial.API.csproj" />
+    <ProjectReference Include="..\SistemaIndustrial.BR\SistemaIndustrial.BR.csproj" />
+    <ProjectReference Include="..\SistemaIndustrial.AD\SistemaIndustrial.AD.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.*" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.*" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.*" />
+    <PackageReference Include="Moq" Version="4.20.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.*" />
+  </ItemGroup>
+
+</Project>

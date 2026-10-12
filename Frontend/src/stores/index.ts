@@ -1,0 +1,7 @@
+export { useAuthStore } from './auth'
+export { useSemanasStore } from './semanas'
+export { useInsumosStore } from './insumos'
+export { useStockStore } from './stock'
+export { useDashboardStore } from './dashboard'
+export { useTiradoProductosStore } from './tiradoProductos'
+export { useProductosCatalogoStore } from './productosCatalogo'

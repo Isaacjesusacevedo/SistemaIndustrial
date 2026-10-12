@@ -1,0 +1,60 @@
+/* src/assets/styles/base/typography.css */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-0);
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
+h4 { font-size: clamp(1.125rem, 2vw, 1.25rem); }
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.page-subtitle {
+  color: var(--text-2);
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.section__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-0);
+}
+
+.section__subtitle {
+  margin: var(--spacing-xs) 0 0;
+  font-size: var(--font-size-base);
+  color: var(--text-1);
+}
+
+@media (max-width: 640px) {
+  .page-title {
+    font-size: 22px;
+  }
+
+  .section__title {
+    font-size: 1.25rem;
+  }
+}

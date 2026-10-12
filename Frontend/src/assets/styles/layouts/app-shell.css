@@ -1,0 +1,333 @@
+/* src/assets/styles/layouts/app-shell.css */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-nav {
+  width: var(--nav-w);
+  min-height: 100vh;
+  background: var(--bg-1);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.app-main {
+  margin-left: var(--nav-w);
+  flex: 1;
+  min-height: 100vh;
+  background: var(--bg-0);
+}
+
+.app-main--full {
+  margin-left: 0;
+}
+
+/* Nav brand */
+.nav-brand {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.nav-brand-logo span {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+}
+
+.nav-brand-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-0);
+  letter-spacing: -0.01em;
+}
+
+.nav-brand-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+/* Nav links */
+.nav-section {
+  padding: 20px 12px 8px;
+  flex: 1;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 12px 8px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  color: var(--text-2);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.nav-link svg {
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.nav-link:hover {
+  background: var(--surface);
+  color: var(--text-0);
+}
+
+.nav-link:hover svg {
+  opacity: 1;
+}
+
+.nav-link.active {
+  background: var(--accent-dim);
+  color: var(--accent-bright);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.nav-link.active svg {
+  opacity: 1;
+  color: var(--accent-bright);
+}
+
+/* Nav footer */
+.nav-footer {
+  padding: 16px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--green-dim);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.nav-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.nav-status-text {
+  font-size: 12px;
+  color: var(--green);
+  font-family: var(--font-mono);
+}
+
+/* Nav semana card */
+.nav-semana-card {
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  background: var(--bg-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.nav-semana-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-0);
+  margin-bottom: 4px;
+}
+
+.nav-semana-estado {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.estado--planificada { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.estado--enprogreso { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.estado--completada { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.estado--cancelada { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.nav-empty {
+  padding: var(--spacing-md);
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+.nav-empty-text {
+  font-size: 0.75rem;
+  color: var(--text-3);
+  margin-bottom: var(--spacing-sm);
+}
+
+.nav-empty-link {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav-link-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.user-menu__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-md);
+}
+
+.user-menu__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.user-menu__name {
+  font-weight: 500;
+  color: var(--text-0);
+}
+
+.el-dropdown-menu__item {
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background: var(--bg-3) !important;
+}
+
+/* Botón hamburguesa (solo visible en mobile) */
+.hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1001;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-0);
+  cursor: pointer;
+}
+
+/* Tablet (641-1024px): sidebar colapsado a solo íconos */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .app-nav {
+    width: 64px;
+  }
+  .app-main {
+    margin-left: 64px;
+  }
+  .nav-brand {
+    padding: 20px 8px 16px;
+    text-align: center;
+  }
+  .nav-brand-logo {
+    margin: 0 auto;
+  }
+  .nav-brand-name,
+  .nav-brand-sub,
+  .nav-section-label,
+  .nav-semana-card,
+  .nav-empty,
+  .nav-status-text,
+  .user-menu__name {
+    display: none;
+  }
+  .nav-link {
+    justify-content: center;
+    padding: 10px 0;
+    font-size: 0;
+    gap: 0;
+  }
+  .nav-section {
+    padding: 16px 8px 8px;
+  }
+  .nav-footer {
+    padding: 12px 8px;
+  }
+  .nav-status {
+    justify-content: center;
+    padding: 8px;
+  }
+}
+
+/* Mobile (640px): sidebar oculto, overlay con hamburguesa */
+@media (max-width: 640px) {
+  .hamburger-btn {
+    display: inline-flex;
+  }
+  .app-nav {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 260px;
+    z-index: 999;
+  }
+  .app-nav.open {
+    transform: translateX(0);
+  }
+  .app-nav__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  .app-main {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+}

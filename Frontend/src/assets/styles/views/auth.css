@@ -1,0 +1,33 @@
+/* src/assets/styles/views/auth.css */
+.layout-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  background: var(--bg-0);
+}
+
+.card--login {
+  width: 100%;
+  max-width: 400px;
+}
+
+.card-subtitle {
+  margin: var(--spacing-xs) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-2);
+}
+
+.btn--block {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .layout-auth {
+    padding: var(--spacing-sm);
+    align-items: flex-start;
+    padding-top: var(--spacing-xl);
+  }
+}

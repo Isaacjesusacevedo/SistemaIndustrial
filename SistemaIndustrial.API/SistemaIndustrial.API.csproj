@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.14" />
+    <ProjectReference Include="..\SistemaIndustrial.AD\SistemaIndustrial.AD.csproj" />
+    <ProjectReference Include="..\SistemaIndustrial.BR\SistemaIndustrial.BR.csproj" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.*" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.*" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.*" />
+  </ItemGroup>
+
+</Project>

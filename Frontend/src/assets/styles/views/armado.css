@@ -1,0 +1,12 @@
+/* src/assets/styles/views/armado.css */
+.text-danger { color: var(--red) !important; }
+.text-success { color: var(--green) !important; }
+.text-warning { color: var(--amber) !important; }
+
+@media (max-width: 640px) {
+  .text-danger,
+  .text-success,
+  .text-warning {
+    white-space: nowrap;
+  }
+}

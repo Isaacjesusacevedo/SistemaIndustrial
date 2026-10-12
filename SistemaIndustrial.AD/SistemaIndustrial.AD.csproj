@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.*" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.*" />
+  </ItemGroup>
+
+<Target Name="CopyADtoAPI" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildProjectDirectory)\..\SistemaIndustrial.API\bin\$(Configuration)\net9.0\" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(MSBuildProjectDirectory)\..\SistemaIndustrial.API\bin\$(Configuration)\net9.0\" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).deps.json" DestinationFolder="$(MSBuildProjectDirectory)\..\SistemaIndustrial.API\bin\$(Configuration)\net9.0\" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).deps.json')" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).runtimeconfig.json" DestinationFolder="$(MSBuildProjectDirectory)\..\SistemaIndustrial.API\bin\$(Configuration)\net9.0\" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).runtimeconfig.json')" />
+  </Target>
+
+</Project>
