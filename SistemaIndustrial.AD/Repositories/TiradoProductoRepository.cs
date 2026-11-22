@@ -71,6 +71,22 @@ public class TiradoProductoRepository : ITiradoProductoRepository
             .ToListAsync();
     }
 
+    public async Task<List<TiradoProducto>> GetBySemanaIdsAsync(IEnumerable<int> semanaIds)
+    {
+        var ids = semanaIds.Distinct().ToList();
+        if (ids.Count == 0)
+            return new List<TiradoProducto>();
+
+        // EF.Constant: los Id se inlinean como IN (1, 2, ...) en lugar de OPENJSON,
+        // que requiere compatibility level >= 130 en SQL Server.
+        return await _context.TiradosProducto
+            .AsNoTracking()
+            .Include(p => p.Categoria)
+            .Include(p => p.Tiradas)
+            .Where(p => EF.Constant(ids).Contains(p.SemanaId))
+            .ToListAsync();
+    }
+
     public async Task<bool> ExistsByNombreSemanaAsync(string nombre, int semanaId, int? excludeId = null)
     {
         var query = _context.TiradosProducto.Where(p => p.Nombre == nombre && p.SemanaId == semanaId);

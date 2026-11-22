@@ -31,9 +31,7 @@ public class DashboardService : IDashboardService
             return ServiceResult<DashboardMetricasDto>.Fail($"La semana con Id {semanaId} no existe.");
 
         var productos = await _tiradoProductoRepository.GetBySemanaIdAsync(semanaId);
-        var tiradas = new List<AD.Models.Tirada>();
-        foreach (var p in productos)
-            tiradas.AddRange(await _tiradoProductoRepository.GetTiradasByProductoAsync(p.Id));
+        var tiradas = productos.SelectMany(p => p.Tiradas).ToList();
         var insumos = await _insumoRepository.GetBySemanaIdAsync(semanaId);
         var stocks = await _stockRepository.GetBySemanaIdAsync(semanaId);
 
@@ -81,12 +79,18 @@ public class DashboardService : IDashboardService
 
         var tendencias = new List<DashboardTendenciaDto>();
 
+        // Una sola consulta para todas las semanas; se agrupa en memoria.
+        var productosPorSemana = semanasOrdenadas.Count == 0
+            ? new Dictionary<int, List<AD.Models.TiradoProducto>>()
+            : (await _tiradoProductoRepository.GetBySemanaIdsAsync(semanasOrdenadas.Select(s => s.Id)))
+                .GroupBy(p => p.SemanaId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
         foreach (var semana in semanasOrdenadas)
         {
-            var productosSemana = await _tiradoProductoRepository.GetBySemanaIdAsync(semana.Id);
-            var tiradasSemana = new List<AD.Models.Tirada>();
-            foreach (var p in productosSemana)
-                tiradasSemana.AddRange(await _tiradoProductoRepository.GetTiradasByProductoAsync(p.Id));
+            var tiradasSemana = productosPorSemana.TryGetValue(semana.Id, out var productosSemana)
+                ? productosSemana.SelectMany(p => p.Tiradas).ToList()
+                : new List<AD.Models.Tirada>();
 
             var totalProducido = tiradasSemana.Sum(t => t.Cantidad);
             var totalRechazado = 0m;
@@ -111,9 +115,7 @@ public class DashboardService : IDashboardService
         var alertas = new List<DashboardAlertaDto>();
 
         var productosAlerta = await _tiradoProductoRepository.GetBySemanaIdAsync(semanaId);
-        var tiradasAlerta = new List<AD.Models.Tirada>();
-        foreach (var p in productosAlerta)
-            tiradasAlerta.AddRange(await _tiradoProductoRepository.GetTiradasByProductoAsync(p.Id));
+        var tiradasAlerta = productosAlerta.SelectMany(p => p.Tiradas).ToList();
 
         if (!tiradasAlerta.Any())
         {
