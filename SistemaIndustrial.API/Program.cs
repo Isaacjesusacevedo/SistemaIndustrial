@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -42,6 +43,17 @@ builder.Services.AddCors(options =>
         .SetPreflightMaxAge(TimeSpan.FromHours(2));
     });
 });
+
+// Compresión de respuestas (JSON) — Brotli si el cliente lo acepta, si no Gzip.
+// Nivel Fastest: el plan free de Render tiene poca CPU.
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(o => o.Level = System.IO.Compression.CompressionLevel.Fastest);
+builder.Services.Configure<GzipCompressionProviderOptions>(o => o.Level = System.IO.Compression.CompressionLevel.Fastest);
 
 // JSON Options
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -143,6 +155,8 @@ if (app.Environment.IsDevelopment())
                .WithTheme(ScalarTheme.BluePlanet);
     });
 }
+
+app.UseResponseCompression();
 
 app.UseRouting();
 app.UseCors("VueCors");
