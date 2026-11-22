@@ -14,9 +14,11 @@ public class TiradoProductoRepository : ITiradoProductoRepository
         _context = context;
     }
 
+    // Solo lectura (se mapea a DTO): sin tracking.
     public async Task<List<TiradoProducto>> GetAllAsync()
     {
         return await _context.TiradosProducto
+            .AsNoTracking()
             .Include(p => p.Categoria)
             .Include(p => p.Tiradas)
             .ToListAsync();
@@ -91,9 +93,12 @@ public class TiradoProductoRepository : ITiradoProductoRepository
         return await _context.TiradosProducto.AnyAsync(p => p.Id == id);
     }
 
+    // Solo lectura (servicios de tirado, dashboard y sync de stock): sin tracking.
+    // GetByIdAsync NO: se usa en flujos de update.
     public async Task<List<TiradoProducto>> GetBySemanaIdAsync(int semanaId)
     {
         return await _context.TiradosProducto
+            .AsNoTracking()
             .Include(p => p.Categoria)
             .Include(p => p.Tiradas)
             .Where(p => p.SemanaId == semanaId)
@@ -127,6 +132,7 @@ public class TiradoProductoRepository : ITiradoProductoRepository
     public async Task<List<string>> GetNombresBySemanaAsync(int semanaId)
     {
         return await _context.TiradosProducto
+            .AsNoTracking()
             .Where(p => p.SemanaId == semanaId)
             .Select(p => p.Nombre)
             .ToListAsync();
@@ -142,6 +148,7 @@ public class TiradoProductoRepository : ITiradoProductoRepository
     public async Task<List<Tirada>> GetTiradasByProductoAsync(int productoId)
     {
         return await _context.Tiradas
+            .AsNoTracking()
             .Where(t => t.TiradoProductoId == productoId)
             .OrderByDescending(t => t.Fecha)
             .ToListAsync();
