@@ -24,11 +24,14 @@ export async function apiFetch<T = any>(
   const authStore = useAuthStore()
   const toast = useToast()
 
-  const buildHeaders = (overrideToken?: string): HeadersInit => {
+  // Content-Type solo si hay body: en un GET sin body ese header convierte la
+  // request en "no simple" y obliga al navegador a hacer un preflight OPTIONS.
+  const buildHeaders = (overrideToken?: string): Record<string, string> => {
     const token = overrideToken ?? authStore.token
-    return token
-      ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-      : { 'Content-Type': 'application/json' }
+    const headers: Record<string, string> = {}
+    if (options.body != null) headers['Content-Type'] = 'application/json'
+    if (token) headers.Authorization = `Bearer ${token}`
+    return headers
   }
 
   const url = `${API_BASE}${endpoint}`
