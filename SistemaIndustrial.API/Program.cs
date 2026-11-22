@@ -37,7 +37,9 @@ builder.Services.AddCors(options =>
         })
         .AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowCredentials();
+        .AllowCredentials()
+        // El navegador cachea el resultado del preflight OPTIONS (Chrome lo limita a 2 h).
+        .SetPreflightMaxAge(TimeSpan.FromHours(2));
     });
 });
 
