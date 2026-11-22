@@ -33,8 +33,37 @@ public class TiradoProductoRepository : ITiradoProductoRepository
     public async Task<TiradoProducto> CreateAsync(TiradoProducto entity)
     {
         _context.TiradosProducto.Add(entity);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            // Si falla, se desadjunta para que no se reintente en el próximo SaveChanges
+            // del mismo DbContext (ej: inserción ítem por ítem en la carga masiva).
+            _context.Entry(entity).State = EntityState.Detached;
+            throw;
+        }
         return entity;
+    }
+
+    public async Task<List<TiradoProducto>> CreateRangeAsync(IReadOnlyCollection<TiradoProducto> entities)
+    {
+        if (entities.Count == 0)
+            return new List<TiradoProducto>();
+
+        _context.TiradosProducto.AddRange(entities);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            foreach (var entity in entities)
+                _context.Entry(entity).State = EntityState.Detached;
+            throw;
+        }
+        return entities.ToList();
     }
 
     public async Task UpdateAsync(int id, TiradoProducto entity)
@@ -93,6 +122,14 @@ public class TiradoProductoRepository : ITiradoProductoRepository
         if (excludeId.HasValue)
             query = query.Where(p => p.Id != excludeId.Value);
         return await query.AnyAsync();
+    }
+
+    public async Task<List<string>> GetNombresBySemanaAsync(int semanaId)
+    {
+        return await _context.TiradosProducto
+            .Where(p => p.SemanaId == semanaId)
+            .Select(p => p.Nombre)
+            .ToListAsync();
     }
 
     public async Task<Tirada> AddTiradaAsync(Tirada tirada)

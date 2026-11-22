@@ -242,70 +242,100 @@ public class TiradoProductoService : ITiradoProductoService
         var errores = new List<string>();
         int ignorados = 0;
 
-        // 3. Para cada item:
+        // 3. Precargar en una consulta cada una: nombres ya existentes en la semana
+        //    (case-insensitive, como la collation de SQL Server) y categorías válidas.
+        var nombresExistentes = new HashSet<string>(
+            await _repository.GetNombresBySemanaAsync(semanaId),
+            StringComparer.OrdinalIgnoreCase);
+
+        var categoriaIdsPedidas = dto.Items
+            .Where(i => i.CategoriaId.HasValue)
+            .Select(i => i.CategoriaId!.Value)
+            .Distinct()
+            .ToList();
+        var categoriasValidas = categoriaIdsPedidas.Count > 0
+            ? (await _categoriaRepository.GetExistingIdsAsync(categoriaIdsPedidas)).ToHashSet()
+            : new HashSet<int>();
+
+        // 4. Validar cada item en memoria
+        var aInsertar = new List<(TiradoProductoBulkItemDto Item, TiradoProducto Entity)>();
         foreach (var item in dto.Items)
+        {
+            // Validar campos obligatorios
+            if (string.IsNullOrWhiteSpace(item.Nombre))
+            {
+                errores.Add("Producto sin nombre fue ignorado.");
+                ignorados++;
+                continue;
+            }
+
+            if (item.PromedioPorTacho <= 0)
+            {
+                errores.Add($"'{item.Nombre}': promedio por tacho debe ser > 0.");
+                ignorados++;
+                continue;
+            }
+
+            if (item.PedidoSemanal < 0 || item.StockInicial < 0)
+            {
+                errores.Add($"'{item.Nombre}': stock y pedido no pueden ser negativos.");
+                ignorados++;
+                continue;
+            }
+
+            if (item.CategoriaId.HasValue && !categoriasValidas.Contains(item.CategoriaId.Value))
+            {
+                errores.Add($"'{item.Nombre}': la categoría no existe (ignorado).");
+                ignorados++;
+                continue;
+            }
+
+            // Ya existe en la semana o vino repetido en este mismo lote
+            if (!nombresExistentes.Add(item.Nombre))
+            {
+                errores.Add($"'{item.Nombre}': ya existe en esta semana (ignorado).");
+                ignorados++;
+                continue;
+            }
+
+            aInsertar.Add((item, new TiradoProducto
+            {
+                SemanaId = semanaId,
+                CategoriaId = item.CategoriaId,
+                Nombre = item.Nombre,
+                UnidadMedida = item.UnidadMedida,
+                PedidoSemanal = item.PedidoSemanal,
+                StockInicial = item.StockInicial,
+                PromedioPorTacho = item.PromedioPorTacho,
+                CantidadTirada = 0,
+                Stock = item.StockInicial - item.PedidoSemanal,
+                Observaciones = item.Observaciones ?? string.Empty,
+                FechaCreacion = DateTime.Now
+            }));
+        }
+
+        // 5. Insertar todo con un solo SaveChanges. Si falla, reintentar uno por uno
+        //    para poder reportar el error de cada ítem.
+        if (aInsertar.Count > 0)
         {
             try
             {
-                // Validar campos obligatorios
-                if (string.IsNullOrWhiteSpace(item.Nombre))
-                {
-                    errores.Add("Producto sin nombre fue ignorado.");
-                    ignorados++;
-                    continue;
-                }
-
-                if (item.PromedioPorTacho <= 0)
-                {
-                    errores.Add($"'{item.Nombre}': promedio por tacho debe ser > 0.");
-                    ignorados++;
-                    continue;
-                }
-
-                if (item.PedidoSemanal < 0 || item.StockInicial < 0)
-                {
-                    errores.Add($"'{item.Nombre}': stock y pedido no pueden ser negativos.");
-                    ignorados++;
-                    continue;
-                }
-
-                if (item.CategoriaId.HasValue && !await _categoriaRepository.ExistsAsync(item.CategoriaId.Value))
-                {
-                    errores.Add($"'{item.Nombre}': la categoría no existe (ignorado).");
-                    ignorados++;
-                    continue;
-                }
-
-                // Verificar si ya existe en la semana
-                if (await _repository.ExistsByNombreSemanaAsync(item.Nombre, semanaId))
-                {
-                    errores.Add($"'{item.Nombre}': ya existe en esta semana (ignorado).");
-                    ignorados++;
-                    continue;
-                }
-
-                var entity = new TiradoProducto
-                {
-                    SemanaId = semanaId,
-                    CategoriaId = item.CategoriaId,
-                    Nombre = item.Nombre,
-                    UnidadMedida = item.UnidadMedida,
-                    PedidoSemanal = item.PedidoSemanal,
-                    StockInicial = item.StockInicial,
-                    PromedioPorTacho = item.PromedioPorTacho,
-                    CantidadTirada = 0,
-                    Stock = item.StockInicial - item.PedidoSemanal,
-                    Observaciones = item.Observaciones ?? string.Empty,
-                    FechaCreacion = DateTime.Now
-                };
-
-                var created = await _repository.CreateAsync(entity);
-                creados.Add(created);
+                creados.AddRange(await _repository.CreateRangeAsync(aInsertar.Select(x => x.Entity).ToList()));
             }
-            catch (Exception ex)
+            catch
             {
-                errores.Add($"'{item.Nombre}': {ex.Message}");
-                ignorados++;
+                foreach (var (item, entity) in aInsertar)
+                {
+                    try
+                    {
+                        creados.Add(await _repository.CreateAsync(entity));
+                    }
+                    catch (Exception ex)
+                    {
+                        errores.Add($"'{item.Nombre}': {ex.Message}");
+                        ignorados++;
+                    }
+                }
             }
         }
 

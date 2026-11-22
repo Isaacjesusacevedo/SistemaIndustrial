@@ -59,4 +59,17 @@ public class CategoriaRepository : ICategoriaRepository
     {
         return await _context.Categorias.AnyAsync(c => c.Id == id);
     }
+
+    public async Task<List<int>> GetExistingIdsAsync(IEnumerable<int> ids)
+    {
+        var lista = ids.Distinct().ToList();
+        if (lista.Count == 0)
+            return new List<int>();
+
+        // EF.Constant: IN (1, 2, ...) en lugar de OPENJSON (requiere compat level >= 130).
+        return await _context.Categorias
+            .Where(c => EF.Constant(lista).Contains(c.Id))
+            .Select(c => c.Id)
+            .ToListAsync();
+    }
 }
