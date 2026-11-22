@@ -205,27 +205,22 @@ public class TiradoProductoService : ITiradoProductoService
         if (!await _semanaRepository.ExistsAsync(semanaId))
             return ServiceResult<List<TiradaResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
+        // GetBySemanaIdAsync ya incluye las Tiradas de cada producto: no hace falta
+        // volver a la base por cada uno (antes era N+1).
         var productos = await _repository.GetBySemanaIdAsync(semanaId);
-        var tiradas = new List<TiradaResponse>();
 
-        foreach (var producto in productos)
-        {
-            var tiradasProducto = await _repository.GetTiradasByProductoAsync(producto.Id);
-            foreach (var tirada in tiradasProducto)
-            {
-                tiradas.Add(new TiradaResponse(
-                    tirada.Id,
-                    producto.Id,
-                    producto.Nombre,
-                    tirada.Fecha,
-                    tirada.Cantidad,
-                    tirada.Observaciones,
-                    tirada.FechaCreacion
-                ));
-            }
-        }
+        var tiradas = productos
+            .SelectMany(p => p.Tiradas.Select(t => new TiradaResponse(
+                t.Id,
+                p.Id,
+                p.Nombre,
+                t.Fecha,
+                t.Cantidad,
+                t.Observaciones,
+                t.FechaCreacion)))
+            .OrderByDescending(t => t.Fecha)
+            .ToList();
 
-        tiradas = tiradas.OrderByDescending(t => t.Fecha).ToList();
         return ServiceResult<List<TiradaResponse>>.Ok(tiradas);
     }
 
