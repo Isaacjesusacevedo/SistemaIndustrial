@@ -11,8 +11,25 @@ export const useSemanasStore = defineStore('semanas', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
   
+  // Petición de fetchAll en curso, para reutilizarla si llega otra igual
+  // (ej: App.vue vía inicializar() y SemanasView al montar).
+  let fetchAllEnCurso: { key: string; promise: Promise<void> } | null = null
+
   // Actions
-  async function fetchAll(params?: { anio?: number; estado?: string }) {
+  function fetchAll(params?: { anio?: number; estado?: string; force?: boolean }) {
+    const { force = false, ...filtros } = params ?? {}
+    const key = JSON.stringify({ anio: filtros.anio, estado: filtros.estado })
+
+    if (!force && fetchAllEnCurso?.key === key) return fetchAllEnCurso.promise
+
+    const promise = cargarTodas(Object.keys(filtros).length ? filtros : undefined).finally(() => {
+      if (fetchAllEnCurso?.promise === promise) fetchAllEnCurso = null
+    })
+    fetchAllEnCurso = { key, promise }
+    return promise
+  }
+
+  async function cargarTodas(params?: { anio?: number; estado?: string }) {
     loading.value = true
     error.value = null
     try {
