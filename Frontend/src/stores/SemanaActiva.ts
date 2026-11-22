@@ -34,11 +34,13 @@ export const useSemanaActivaStore = defineStore('semanaActiva', () => {
    * 1. Carga las semanas si no están
    * 2. Intenta restaurar desde localStorage
    * 3. Si no, selecciona la más reciente
+   *
+   * Todas las llamadas concurrentes (App.vue, DashboardView, ...) esperan la
+   * MISMA promesa, así nadie sigue de largo antes de que termine la carga.
    */
-  async function inicializar() {
-    if (inicializado.value) return
-    inicializado.value = true
+  let initPromise: Promise<void> | null = null
 
+  async function cargarInicial() {
     try {
       if (semanasStore.items.length === 0) {
         await semanasStore.fetchAll()
@@ -59,8 +61,22 @@ export const useSemanaActivaStore = defineStore('semanaActiva', () => {
         setSemana(semanasStore.items[0].id)
       }
     } catch {
-      // Silencioso: si falla, simplemente no hay semana activa
+      // Silencioso: si falla, simplemente no hay semana activa.
+      // Se descarta la promesa para que una próxima llamada pueda reintentar.
+      initPromise = null
+    } finally {
+      inicializado.value = true
     }
+  }
+
+  function inicializar() {
+    return (initPromise ??= cargarInicial())
+  }
+
+  /** Descarta la inicialización previa y vuelve a cargar (ej: tras borrar la semana activa). */
+  function reinicializar() {
+    initPromise = null
+    return inicializar()
   }
 
   return {
@@ -69,6 +85,7 @@ export const useSemanaActivaStore = defineStore('semanaActiva', () => {
     tieneSemanaActiva,
     inicializado,
     setSemana,
-    inicializar
+    inicializar,
+    reinicializar
   }
 })

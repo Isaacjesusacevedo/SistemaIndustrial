@@ -46,7 +46,7 @@ const confirmDelete = async (id: number) => {
     // Si era la semana activa, limpiarla y re-seleccionar la más reciente
     if (semanaActiva.semanaId === id) {
       semanaActiva.setSemana(null)
-      await semanaActiva.inicializar()
+      await semanaActiva.reinicializar()
     }
   } catch (e: any) {
     toast.error(e.message || 'Error al eliminar la semana')
