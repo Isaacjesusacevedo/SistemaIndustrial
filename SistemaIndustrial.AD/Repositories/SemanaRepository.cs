@@ -64,4 +64,10 @@ public class SemanaRepository : ISemanaRepository
     {
         return await _spInvoker.ExistsAsync("EXEC sp_Semanas_HasDependentData @Id", new { Id = id });
     }
+
+    /// <summary>¿Hay alguna Tirada registrada en algún producto de tirado de la semana?</summary>
+    public async Task<bool> HasTiradasAsync(int semanaId)
+    {
+        return await _context.Tiradas.AnyAsync(t => t.TiradoProducto.SemanaId == semanaId);
+    }
 }

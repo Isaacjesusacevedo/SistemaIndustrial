@@ -69,10 +69,13 @@ public class SemanaService : ISemanaService
         if (existing == null)
             return ServiceResult.Fail($"La semana con Id {id} no existe.");
 
-        if (await _repository.HasDependentDataAsync(id))
-            return ServiceResult.Fail("No se puede eliminar la semana porque tiene datos asociados (insumos, stock, tirado).");
+        // Se puede eliminar con todos sus datos (insumos, stock y productos de tirado
+        // se borran por ON DELETE CASCADE) salvo que ya tenga producción registrada.
+        if (string.Equals(existing.Estado, "Completada", StringComparison.OrdinalIgnoreCase)
+            || await _repository.HasTiradasAsync(id))
+            return ServiceResult.Fail("No se puede eliminar: la semana ya tiene producción registrada. Editala o eliminá primero sus tiradas.");
 
-        await _repository.DeleteAsync(id);
+        await _repository.DeleteAsync(id); // sp_Semanas_Delete
         return ServiceResult.Ok("Semana eliminada correctamente.");
     }
 
