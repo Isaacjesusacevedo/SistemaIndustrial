@@ -6,6 +6,8 @@ import type { Stock, StockCreateDto, StockUpdateDto, StockResponse } from '@/typ
 
 export const useStockStore = defineStore('stock', () => {
   const items = ref<StockResponse[]>([])
+  /** Semana a la que corresponden `items` (null si no se cargó o falló la carga). */
+  const semanaIdCargada = ref<number | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
   
@@ -13,9 +15,11 @@ export const useStockStore = defineStore('stock', () => {
     loading.value = true
     error.value = null
     try {
+      semanaIdCargada.value = null
       const response = await stockApi.getBySemana(semanaId)
       if (response.success) {
         items.value = response.data || []
+        semanaIdCargada.value = semanaId
       } else {
         throw new Error(response.message)
       }
@@ -57,6 +61,7 @@ export const useStockStore = defineStore('stock', () => {
       const response = await stockApi.syncFromTirado(semanaId)
       if (response.success && response.data) {
         items.value = response.data
+        semanaIdCargada.value = semanaId
       } else {
         throw new Error(response.message)
       }
@@ -68,5 +73,5 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
   
-  return { items, loading, error, fetchBySemana, create, update, delete: deleteItem, syncFromTirado }
+  return { items, semanaIdCargada, loading, error, fetchBySemana, create, update, delete: deleteItem, syncFromTirado }
 })

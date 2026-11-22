@@ -21,6 +21,8 @@ export const useTiradoProductosStore = defineStore('tiradoProductos', () => {
   const error = ref<string | null>(null)
   const filtro = ref<FiltroTirado>('totales')
   const semanaIdActual = ref<number | null>(null)
+  /** Semana cuya lista completa está en `items` (null si no se cargó o falló la carga). */
+  const semanaIdCargada = ref<number | null>(null)
 
   const toast = useToast()
 
@@ -83,6 +85,7 @@ export const useTiradoProductosStore = defineStore('tiradoProductos', () => {
     loading.value = true
     error.value = null
     semanaIdActual.value = semanaId
+    semanaIdCargada.value = null
 
     if (filtroLocal) filtro.value = filtroLocal
 
@@ -91,6 +94,7 @@ export const useTiradoProductosStore = defineStore('tiradoProductos', () => {
 
       if (response.success) {
         items.value = response.data || []
+        semanaIdCargada.value = semanaId
       } else {
         throw new Error(response.message || 'Error al cargar productos')
       }
@@ -207,6 +211,7 @@ export const useTiradoProductosStore = defineStore('tiradoProductos', () => {
     error,
     filtro,
     semanaIdActual,
+    semanaIdCargada,
     // getters
     filtrados,
     totales,

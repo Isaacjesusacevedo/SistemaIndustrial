@@ -4,12 +4,14 @@ import { RouterLink } from 'vue-router'
 import { useSemanasStore } from '@/stores/semanas'
 import { useSemanaActivaStore } from '@/stores/SemanaActiva'
 import { useToast } from '@/composables/useToast'
+import { useMensajeBorradoSemana } from '@/composables/useMensajeBorradoSemana'
 import { ElMessageBox } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 const store = useSemanasStore()
 const semanaActiva = useSemanaActivaStore()
 const toast = useToast()
+const mensajeBorrado = useMensajeBorradoSemana()
 
 const semanas = computed(() => store.items)
 
@@ -28,7 +30,7 @@ const confirmDelete = async (id: number) => {
     : 'esta semana'
 
   const confirmed = await ElMessageBox.confirm(
-    `¿Eliminar ${label}? Se perderán todos sus datos asociados (insumos, stock, registros y productos).`,
+    mensajeBorrado(id, label),
     'Confirmar eliminación',
     {
       confirmButtonText: 'Eliminar',

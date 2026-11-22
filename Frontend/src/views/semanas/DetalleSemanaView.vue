@@ -9,6 +9,7 @@ import { useTiradoProductosStore } from '@/stores/tiradoProductos'
 import { useToast } from '@/composables/useToast'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessageBox } from 'element-plus'
+import { useMensajeBorradoSemana } from '@/composables/useMensajeBorradoSemana'
 // ✅ Nombres correctos de iconos
 import { ArrowLeft, Edit, Delete, Box, TakeawayBox, TrendCharts } from '@element-plus/icons-vue'
 import KpiCard from '@/components/KpiCard.vue'
@@ -30,6 +31,7 @@ const authStore = useAuthStore()
 const toast = useToast()
 
 const semanaId = computed(() => Number(route.params.id))
+const mensajeBorrado = useMensajeBorradoSemana()
 const semana = ref<any>(null)
 const loading = ref(false)
 const activeTab = ref('stock')
@@ -219,7 +221,10 @@ const cargarDetalle = async () => {
 
 const handleDelete = async () => {
   const confirmed = await ElMessageBox.confirm(
-    '¿Eliminar esta semana? Se perderán todos sus datos asociados.',
+    mensajeBorrado(
+      semanaId.value,
+      store.current ? `Semana ${store.current.numeroSemana}/${store.current.anio}` : 'esta semana'
+    ),
     'Confirmar',
     { confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar', type: 'warning' }
   ).catch(() => false)

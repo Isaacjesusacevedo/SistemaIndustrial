@@ -6,6 +6,8 @@ import type { Insumo, InsumoCreateDto, InsumoUpdateDto, InsumoResponse } from '@
 
 export const useInsumosStore = defineStore('insumos', () => {
   const items = ref<InsumoResponse[]>([])
+  /** Semana a la que corresponden `items` (null si no se cargó o falló la carga). */
+  const semanaIdCargada = ref<number | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
   
@@ -13,9 +15,11 @@ export const useInsumosStore = defineStore('insumos', () => {
     loading.value = true
     error.value = null
     try {
+      semanaIdCargada.value = null
       const response = await insumosApi.getBySemana(semanaId)
       if (response.success) {
         items.value = response.data || []
+        semanaIdCargada.value = semanaId
       } else {
         throw new Error(response.message)
       }
@@ -50,5 +54,5 @@ export const useInsumosStore = defineStore('insumos', () => {
     items.value = items.value.filter(i => i.id !== id)
   }
   
-  return { items, loading, error, fetchBySemana, create, update, delete: deleteItem }
+  return { items, semanaIdCargada, loading, error, fetchBySemana, create, update, delete: deleteItem }
 })
