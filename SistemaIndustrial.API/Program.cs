@@ -165,7 +165,24 @@ app.UseAuthorization();
 
 // Health checks (públicos)
 app.MapGet("/health", () => Results.Ok(new { status = "Healthy", timestamp = DateTime.UtcNow })).AllowAnonymous();
-app.MapGet("/health/ready", () => Results.Ok(new { status = "Ready", database = "Connected" })).AllowAnonymous();
+// /health queda liviano (sin base): es el que usa el keepalive.
+// /health/ready sí verifica la base con un SELECT 1 y timeout corto.
+app.MapGet("/health/ready", async (AppDbContext db, ILogger<Program> logger, CancellationToken ct) =>
+{
+    try
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        cts.CancelAfter(TimeSpan.FromSeconds(5));
+        db.Database.SetCommandTimeout(5);
+        await db.Database.ExecuteSqlRawAsync("SELECT 1", cts.Token);
+        return Results.Ok(new { status = "Ready", database = "Connected" });
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "Health check /health/ready: la base no respondió");
+        return Results.Json(new { status = "NotReady", database = "Disconnected" }, statusCode: StatusCodes.Status503ServiceUnavailable);
+    }
+}).AllowAnonymous();
 app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
 
 // Endpoints
