@@ -133,10 +133,11 @@ public class TiradoProductoService : ITiradoProductoService
 
     public async Task<ServiceResult<List<TiradoProductoResponse>>> GetBySemanaIdAsync(int semanaId)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
+        // Primero la consulta real; solo si vuelve vacía se verifica que la semana exista.
+        var entities = await _repository.GetBySemanaIdAsync(semanaId);
+        if (entities.Count == 0 && !await _semanaRepository.ExistsAsync(semanaId))
             return ServiceResult<List<TiradoProductoResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
-        var entities = await _repository.GetBySemanaIdAsync(semanaId);
         var responses = entities.Select(MapToResponse).ToList();
         return ServiceResult<List<TiradoProductoResponse>>.Ok(responses);
     }
@@ -150,10 +151,10 @@ public class TiradoProductoService : ITiradoProductoService
 
     public async Task<ServiceResult<List<TiradoProductoResponse>>> GetBySemanaConFiltroAsync(int semanaId, string? filtro = null)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
-            return ServiceResult<List<TiradoProductoResponse>>.Fail($"La semana con Id {semanaId} no existe.");
-
+        // Primero la consulta real; solo si vuelve vacía se verifica que la semana exista.
         var entities = await _repository.GetBySemanaIdAsync(semanaId);
+        if (entities.Count == 0 && !await _semanaRepository.ExistsAsync(semanaId))
+            return ServiceResult<List<TiradoProductoResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
         if (!string.IsNullOrWhiteSpace(filtro))
         {
@@ -202,12 +203,13 @@ public class TiradoProductoService : ITiradoProductoService
 
     public async Task<ServiceResult<List<TiradaResponse>>> GetTiradasBySemanaAsync(int semanaId)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
-            return ServiceResult<List<TiradaResponse>>.Fail($"La semana con Id {semanaId} no existe.");
-
         // GetBySemanaIdAsync ya incluye las Tiradas de cada producto: no hace falta
         // volver a la base por cada uno (antes era N+1).
         var productos = await _repository.GetBySemanaIdAsync(semanaId);
+
+        // Solo si vuelve vacía se verifica que la semana exista.
+        if (productos.Count == 0 && !await _semanaRepository.ExistsAsync(semanaId))
+            return ServiceResult<List<TiradaResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
         var tiradas = productos
             .SelectMany(p => p.Tiradas.Select(t => new TiradaResponse(

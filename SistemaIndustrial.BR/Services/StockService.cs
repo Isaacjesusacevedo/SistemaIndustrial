@@ -92,21 +92,23 @@ public class StockService : IStockService
 
     public async Task<ServiceResult<List<StockResponse>>> GetBySemanaIdAsync(int semanaId)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
+        // Primero la consulta real; solo si vuelve vacía se verifica que la semana exista.
+        var entities = await _repository.GetBySemanaIdAsync(semanaId);
+        if (entities.Count == 0 && !await _semanaRepository.ExistsAsync(semanaId))
             return ServiceResult<List<StockResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
-        var entities = await _repository.GetBySemanaIdAsync(semanaId);
         var responses = entities.Select(MapToResponse).ToList();
         return ServiceResult<List<StockResponse>>.Ok(responses);
     }
 
     public async Task<ServiceResult<List<StockResponse>>> SyncFromTiradoAsync(int semanaId)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
-            return ServiceResult<List<StockResponse>>.Fail("Semana no encontrada.");
-
+        // _tiradoService.GetBySemanaIdAsync ya verifica la semana (solo consulta
+        // ExistsAsync si no hay productos) y ese es su único motivo de fallo.
         var tiradoResult = await _tiradoService.GetBySemanaIdAsync(semanaId);
-        if (!tiradoResult.Success || tiradoResult.Data == null)
+        if (!tiradoResult.Success)
+            return ServiceResult<List<StockResponse>>.Fail("Semana no encontrada.");
+        if (tiradoResult.Data == null)
             return ServiceResult<List<StockResponse>>.Fail("Error al leer los productos de tirado.");
 
         var tirados = tiradoResult.Data;

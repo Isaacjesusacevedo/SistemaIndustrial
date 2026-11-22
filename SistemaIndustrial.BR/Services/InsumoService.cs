@@ -85,10 +85,11 @@ public class InsumoService : IInsumoService
 
     public async Task<ServiceResult<List<InsumoResponse>>> GetBySemanaIdAsync(int semanaId)
     {
-        if (!await _semanaRepository.ExistsAsync(semanaId))
+        // Primero la consulta real; solo si vuelve vacía se verifica que la semana exista.
+        var entities = await _repository.GetBySemanaIdAsync(semanaId);
+        if (entities.Count == 0 && !await _semanaRepository.ExistsAsync(semanaId))
             return ServiceResult<List<InsumoResponse>>.Fail($"La semana con Id {semanaId} no existe.");
 
-        var entities = await _repository.GetBySemanaIdAsync(semanaId);
         var responses = entities.Select(MapToResponse).ToList();
         return ServiceResult<List<InsumoResponse>>.Ok(responses);
     }
